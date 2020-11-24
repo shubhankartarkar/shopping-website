@@ -1,35 +1,16 @@
 const express = require('express')
 const app = express()
-const sql = require("mssql/msnodesqlv8");
+const cors = require('cors')
+const bodyParser = require('body-parser')
 const port = process.env.PORT || 3001
 
-// config for your database
-var config = {
-  server: 'localhost',
-  database: 'ecommerce',
-  driver: "msnodesqlv8",
-  options: {
-    trustedConnection: true
-  }
-};
+app.use(cors())
+app.use(bodyParser.json()) 
+app.use(bodyParser.urlencoded({
+  extended: true
+}))
 
-app.get('/products', (req, res) => {
-  sql.connect(config, function (err) {
-    if (err) {
-      res.send('Some error occured')
-    } else {
-      var request = new sql.Request();
-      request.input('myid',sql.Numeric,'2')
-      request.query('select * from customer where Customerid = @myid', function (err, recordset) {
-
-        if (err) {
-          res.send(err)
-        } else {
-          res.json(recordset.recordset);
-        }
-      });
-    }
-  })
-})
+//app.use('/api/auth', require('./routes/auth/index'))
+app.use('/api/product', require('./routes/products/'))
 
 app.listen(port, () => console.log(`listening on port ${port}`))
