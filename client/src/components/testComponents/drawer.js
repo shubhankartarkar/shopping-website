@@ -1,39 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import Button from '@material-ui/core/Button';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+import { Drawer, Button, IconButton, List, ListItem, ListItemIcon, ListItemText, AppBar, Toolbar, Typography } from '@material-ui/core';
+import MenuIcon from '@material-ui/icons/Menu';
+import InboxIcon from '@material-ui/icons/Inbox';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   list: {
     width: 250,
   },
   fullList: {
     width: 'auto',
   },
-});
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  },
+}));
 
 export default function SideDrawer() {
   const classes = useStyles();
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     left: false
   });
 
   const toggleDrawer = () => {
-    setState({left: !state.left});
+    setState((prevState) => ({ ...prevState,left: !prevState.left }));
   };
 
   const list = () => (
-     <div className={classes.list} onClick={() => toggleDrawer()} onKeyDown={() => toggleDrawer()} role="presentation">
+    <div className={classes.list} onClick={() => toggleDrawer()} onKeyDown={() => toggleDrawer()} role="presentation">
       <List>
         {['All mail', 'Trash', 'Spam'].map((text, index) => (
           <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+            <ListItemIcon><InboxIcon /></ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>
         ))}
@@ -44,11 +45,21 @@ export default function SideDrawer() {
   return (
     <div>
       <React.Fragment>
-          <Button onClick={() => toggleDrawer()}>Left</Button>
-          <Drawer anchor="left" open={state.left} onClose={() => toggleDrawer()}>
-            {list()}
-          </Drawer>
-        </React.Fragment>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton onClick={() => toggleDrawer()} edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" className={classes.title}>
+              News
+          </Typography>
+            <Button color="inherit">Login</Button>
+          </Toolbar>
+        </AppBar>
+        <Drawer anchor="left" open={state.left} onClose={() => toggleDrawer()}>
+          {list()}
+        </Drawer>
+      </React.Fragment>
     </div>
   );
 }
