@@ -7,12 +7,12 @@ import SideDrawer from '../components/ApplicationBar/Drawer';
 function Main() {
   return (
     <BrowserRouter>
-       <SideDrawer/>
-          <Switch>
-            <Route exact path="/" component={Products}/>
-            <Route path="/Profile" component={Profile}/>
-          </Switch>
-      </BrowserRouter>
+      <SideDrawer />
+      <Switch>
+        <Route exact path="/" component={Products} />
+        <Route path="/Profile" component={Profile} />
+      </Switch>
+    </BrowserRouter>
   )
 }
 

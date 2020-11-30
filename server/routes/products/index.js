@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
     } else {
       let request = new sql.Request();
       request.input('myid',sql.Numeric,'2')
-      request.query('select * from Product', function (err, recordset) {
+      request.query(`select productid as id,name,price,description,isnull(Image,'product-placeholder.png') as image from Product`, function (err, recordset) {
 
         if (err) {
           res.send(err)

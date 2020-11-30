@@ -10,6 +10,8 @@ app.use(bodyParser.urlencoded({
   extended: true
 }))
 
+app.use('/public',express.static(__dirname+'/public'))
+
 //app.use('/api/auth', require('./routes/auth/index'))
 app.use('/api/product', require('./routes/products/'))
 
