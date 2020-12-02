@@ -26,3 +26,5 @@ yarn-debug.log*
 yarn-error.log*
 *.xlsx
 *.png
+client/debug.log
+client/debug.log
