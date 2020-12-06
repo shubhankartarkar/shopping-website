@@ -32,7 +32,7 @@ router.get('/', (req, res) => {
     if (err) {
       res.send(err)
     } else {
-      let request = new sql.Request();
+      let request = new sql.Request(); 
       request.query(`select productid as id,productname as name,productprice as price,
       productDescription as description,isnull(productImage,'product-image-placeholder.jpg') as image from Product`, function (err, recordset) {
 
