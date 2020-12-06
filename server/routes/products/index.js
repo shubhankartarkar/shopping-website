@@ -1,15 +1,31 @@
 const express = require('express');
-const sql = require("mssql/msnodesqlv8");
+const sql = require("mssql");
 const router =  express.Router()
 
-const config = {
-  server: 'localhost',
+// const config = {
+//   server: 'user-PC',
+//   database: 'ecommerce',
+//   driver: "msnodesqlv8",
+//   options: {
+//     trustedConnection: true
+//   }
+// };
+
+// var config = {
+//   driver: 'msnodesqlv8',
+//   connectionString: 'Driver=SQL Server;Server=user-PC\\MSSQLSERVER;Database=ecommerce;Trusted_Connection=true;'
+// };
+
+var config = {
+  user: 'testing',
+  password: 'test',
+  server: 'user-PC', 
   database: 'ecommerce',
-  driver: "msnodesqlv8",
-  options: {
-    trustedConnection: true
+  options:{
+    enableArithAbort:true
   }
 };
+
 
 router.get('/', (req, res) => {
   sql.connect(config, function (err) {
@@ -17,8 +33,8 @@ router.get('/', (req, res) => {
       res.send(err)
     } else {
       let request = new sql.Request();
-      request.input('myid',sql.Numeric,'2')
-      request.query(`select productid as id,name,price,description,isnull(Image,'product-placeholder.png') as image from Product`, function (err, recordset) {
+      request.query(`select productid as id,productname as name,productprice as price,
+      productDescription as description,isnull(productImage,'product-image-placeholder.jpg') as image from Product`, function (err, recordset) {
 
         if (err) {
           res.send(err)

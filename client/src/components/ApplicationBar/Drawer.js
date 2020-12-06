@@ -43,6 +43,14 @@ export default function SideDrawer() {
           <ListItemIcon><CalendarTodayIcon/></ListItemIcon>
           <ListItemText primary="My Profile"/>
         </ListItem>
+        <ListItem button onClick={() => (history.push('/Categories'))}>
+          <ListItemIcon><CalendarTodayIcon/></ListItemIcon>
+          <ListItemText primary="Add Category"/>
+        </ListItem>
+        <ListItem button onClick={() => (history.push('/Products'))}>
+          <ListItemIcon><CalendarTodayIcon/></ListItemIcon>
+          <ListItemText primary="Add Product"/>
+        </ListItem>
       </List>
     </div>
   );
