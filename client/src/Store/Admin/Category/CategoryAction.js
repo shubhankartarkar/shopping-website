@@ -27,6 +27,7 @@ function fetchCategory(){
     dispatch(fetchCategoryRequest())
     axios.get(`${SERVER_URL}/api/category`)
       .then(res => {
+        console.log(res)
         dispatch(fetchCategorySuccess(res.data))
       })
       .catch(err => {
