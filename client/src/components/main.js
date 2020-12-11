@@ -3,10 +3,10 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Products from './layout/Products';
 import Profile from './layout/Profile';
 import SideDrawer from '../components/ApplicationBar/Drawer';
-import AddProduct from './Admin/AddProduct';
-import ProductList from './Admin/ProductList';
-import AddCategory from './Admin/AddCategory';
-import CategoryList from './Admin/CategoryList';
+import AddProduct from './Admin/Product/AddProduct';
+import ProductList from './Admin/Product/ProductList';
+import AddCategory from './Admin/Category/AddCategory';
+import CategoryList from './Admin/Category/CategoryList';
 import { Grid } from '@material-ui/core';
 
 function Main() {
