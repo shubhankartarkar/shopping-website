@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Products from './Layout/Products';
-import Profile from './Layout/Profile';
+import Products from './layout/Products';
+import Profile from './layout/Profile';
 import SideDrawer from '../components/ApplicationBar/Drawer';
 import AddProduct from './Admin/AddProduct';
 import ProductList from './Admin/ProductList';
@@ -13,7 +13,8 @@ function Main() {
   return (
     <BrowserRouter>
       <SideDrawer />
-        <Grid container>
+      <Grid container alignItems="flex-start" spacing={2}>
+        <Grid item md={12} style={{margin:'auto'}}>
         <Switch>
           <Route exact path="/" component={Products} />
           <Route path="/Profile" component={Profile} />
@@ -22,6 +23,7 @@ function Main() {
           <Route path="/Add-Category" component={AddCategory} />
           <Route path="/Categories" component={CategoryList} /> 
         </Switch>
+      </Grid>
       </Grid>
     </BrowserRouter>
   )
