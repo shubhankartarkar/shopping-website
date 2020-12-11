@@ -37,10 +37,20 @@ function CategoryReducer(state = initialState, action){
       }
     
     case ADD_EDIT_CATEGORY_SUCCESS:
+      let newCategory = [], categoryIndex = 0;
+      categoryIndex = action.payload[0].categoryId - 1;
+      if(categoryIndex >= 0){
+        if(state.categories[categoryIndex] === undefined){
+          newCategory = [...state.categories, ...action.payload]
+        } else {
+          newCategory = [...state.categories.slice(0, categoryIndex), ...action.payload,...state.categories.slice(categoryIndex + 1)]
+        }
+      }
+      
       return {
         ...state,
-        categories:[...state.categories, action.payload],
-        saving:false
+        categories: newCategory,
+        saving:true
       }
     
     case ADD_EDIT_CATEGORY_ERROR:

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
@@ -38,30 +38,38 @@ const useStyles = makeStyles(theme => ({
 function CategoryTable(props) {
   const { categories } = props
   const classes = useStyles();
+
+  const [open, setOpen] = useState(false);
+  let [categoryId, setCategoryId] = useState(0)
+
+  const toggleModal = () => {
+    setOpen(!open)
+  }
+
   return (
     <>
-    <TableContainer component={Paper} className={classes.paper}>
-      <Button variant="contained" color="secondary" className={classes.button} startIcon={<AddIcon />}>Add</Button>
-      <Table className={classes.root} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Action</TableCell>
-            <TableCell>Name</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {categories.map((row) => (
-            <TableRow key={row.categoryId}>
-              <TableCell component="th" scope="row">
-              <EditIcon onClick={() => console.log(row.categoryId)}/>
-              </TableCell>
-              <TableCell >{row.categoryName}</TableCell>
+      <CategoryForm open={open} toggleModal={toggleModal} categoryId={categoryId} />
+      <TableContainer component={Paper} className={classes.paper}>
+        <Button onClick={() => (setCategoryId(0), toggleModal())} variant="contained" color="secondary" className={classes.button} startIcon={<AddIcon />}>Add</Button>
+        <Table className={classes.root} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Action</TableCell>
+              <TableCell>Name</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-    <CategoryForm/>
+          </TableHead>
+          <TableBody>
+            {categories.map((row) => (
+              <TableRow key={row.categoryId}>
+                <TableCell component="th" scope="row">
+                  <EditIcon onClick={() => (setCategoryId(row.categoryId), toggleModal())} />
+                </TableCell>
+                <TableCell>{row.categoryName}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </>
   )
 }

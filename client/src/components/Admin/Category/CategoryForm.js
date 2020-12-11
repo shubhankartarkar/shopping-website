@@ -1,50 +1,63 @@
-import React from 'react';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import React, { useEffect, useState } from 'react';
+import { TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
+import AutorenewIcon from '@material-ui/icons/Autorenew';
+import { connect } from 'react-redux';
 
-function CategoryForm() {
-  const [open, setOpen] = React.useState(false);
+import { addEditCategory } from '../../../Store/Admin/Category/CategoryAction'
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+function CategoryForm(props) {
+  const { open, toggleModal, categoryId, category: { categories, saving }, addEditCategory } = props
+  const [category, setCategory] = useState('')
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  useEffect(() => {
+    if(open){
+      getCategoryName();
+    }
+
+    return () => {
+      setCategory('')
+    }
+  }, [open])
+
+  const getCategoryName = () => {
+    categories.map(c => {
+      if(c.categoryId === categoryId) {
+        setCategory(c.categoryName)
+      }
+    })
+  }
+
+  const saveCategory = () => {
+    addEditCategory({categoryId,name:category})
+    if(!saving){
+      toggleModal()
+    }
+  }
+  
 
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Open form dialog
-      </Button>
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+      <Dialog fullWidth disableBackdropClick open={open} onClose={toggleModal} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">{categoryId > 0 ? 'Edit' : 'Add'} Category</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            To subscribe to this website, please enter your email address here. We will send updates
-            occasionally.
-          </DialogContentText>
           <TextField
             autoFocus
-            margin="dense"
-            id="name"
-            label="Email Address"
-            type="email"
+            autoComplete="off"
+            id="categoryName"
+            label="Category Name"
+            type="text"
             fullWidth
+            variant="outlined"
+            value={category}
+            onChange={e => setCategory(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={toggleModal} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleClose} color="primary">
-            Subscribe
+          <Button onClick={() => (saveCategory())} color="primary">
+            {saving ? <AutorenewIcon/>: 'Save' }
           </Button>
         </DialogActions>
       </Dialog>
@@ -52,4 +65,16 @@ function CategoryForm() {
   );
 }
 
-export default CategoryForm
+const mapStateToProps = state => {
+  return {
+    category: state.categories
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addEditCategory : (data) => dispatch(addEditCategory(data))
+  }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(CategoryForm)

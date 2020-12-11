@@ -42,9 +42,13 @@ router.post('/', (req, res) => {
         
         if(categoryId > 0){
           request.input('categoryId', sql.Int,categoryId)
-          request.query(`update Category set Name = @name where categoryId = @categoryId; 
+          request.query(`update Category set categoryName = @name where categoryId = @categoryId; 
             select * from Category where categoryId = @categoryId`,(err, recordset) => {
-            if(!err) res.send(recordset.recordset)
+            if(err){
+              res.send(err)
+            } else {
+              res.send(recordset.recordset)
+            } 
           })
 
         } else {

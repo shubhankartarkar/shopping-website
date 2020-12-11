@@ -8,6 +8,10 @@ app.use(cors())
 app.use(bodyParser.json()) 
 app.use(bodyParser.urlencoded({extended: true}))
 
+// app.use((req, res, next) => {
+//   setTimeout(() => next(), 5000);
+// });
+
 app.use('/public',express.static(__dirname+'/public'))
 
 //app.use('/api/auth', require('./routes/auth/'))
