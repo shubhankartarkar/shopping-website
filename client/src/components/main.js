@@ -13,7 +13,7 @@ function Main() {
   return (
     <BrowserRouter>
       <SideDrawer />
-      <Grid container alignItems="flex-start" spacing={2}>
+      <Grid container alignItems="flex-start">
         <Grid item md={12} style={{margin:'auto'}}>
         <Switch>
           <Route exact path="/" component={Products} />
