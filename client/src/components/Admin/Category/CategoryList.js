@@ -14,14 +14,12 @@ function CategoryList(props) {
 
   function renderCategories(){
     if(categories.loading){
-      return (
-        <>
-        <LinearProgress color="secondary" style={{width: '100%'}}/>
-        </>
-      )
-    } else if(categories.error.length > 0) {
+      return <LinearProgress color="secondary" style={{width: '100%'}}/>
+    } 
+    else if(categories.error.length > 0) {
       return <ErrorComponent error={categories.error}/>
-    } else {
+    } 
+    else {
       return <CategoryTable categories={categories.categories}/>
     }
   }
