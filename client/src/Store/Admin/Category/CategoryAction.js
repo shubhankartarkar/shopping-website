@@ -25,7 +25,7 @@ function fetchCategoryError(error){
 function fetchCategory(){
   return(dispatch) => {
     dispatch(fetchCategoryRequest())
-    axios.get(`${SERVER_URL}/api/category`)
+    return axios.get(`${SERVER_URL}/api/category`)
       .then(res => {
         console.log(res)
         dispatch(fetchCategorySuccess(res.data))
@@ -59,7 +59,7 @@ function addEditCategoryError(err){
 function addEditCategory(categoryData){
   return (dispatch) => {
     dispatch(addEditCategoryRequest())
-    axios.post(`${SERVER_URL}/api/category`,categoryData)
+    return axios.post(`${SERVER_URL}/api/category`,categoryData)
       .then(res => {
         dispatch(addEditCategorySuccess(res.data))
       })

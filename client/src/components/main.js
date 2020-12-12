@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Products from './Layout/Products';
-import Profile from './Layout/Profile';
+import Products from './layout/Products';
+import Profile from './layout/Profile';
 import SideDrawer from '../components/ApplicationBar/Drawer';
 import AddProduct from './Admin/Product/AddProduct';
 import ProductList from './Admin/Product/ProductList';
