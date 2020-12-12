@@ -15,7 +15,7 @@ const ProductList = (props) => {
 
   function renderProducts(){
     if(products.loading){
-      return <LinearProgress/>
+      return <LinearProgress color="secondary" style={{width: '100%'}}/>
     }
     else if(products.error.length > 0){
       return <ErrorComponent error={products.error}/>

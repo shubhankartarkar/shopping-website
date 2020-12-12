@@ -1,54 +1,88 @@
 import React, { useEffect, useState } from 'react'
-import { TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, makeStyles } from '@material-ui/core';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
 import { connect } from 'react-redux';
-import { addEditCategory } from '../../../Store/Admin/Product/ProductAction'
+import { addEditCategory } from '../../../Store/Admin/Product/ProductAction';
+import TextInput from '../../controls/TextInput';
+import ProductImage from './ProductImage';
+
+const useStyles = makeStyles(theme => ({
+  gridItem: {
+    padding: 5
+  }
+}))
 
 function ProductForm(props) {
-  const { open, toggleModal, categoryId, product: { products, saving }, addEditCategory } = props
-  const [category, setCategory] = useState('')
+  const { open, toggleModal, productId, product: { products, saving }, addEditCategory } = props
+  const classes = useStyles()
+  const initialState = {
+    id: productId,
+    name: '',
+    price: 1,
+    description: '',
+    categoryId: 0,
+    image:''
+  }  
+
+  const [product, setProduct] = useState(initialState)
 
   useEffect(() => {
     if (open) {
-      getCategoryName();
+      getProduct();
     }
 
     return () => {
-      setCategory('')
+      setProduct(initialState)
     }
   }, [open])
 
-  const getCategoryName = () => {
-    products.map(c => {
-      if(c.categoryId === categoryId) {
-        setCategory(c.categoryName)
-      }
-    })
+  const getProduct = () => {
+    // products.map(c => {
+    //   if(c.categoryId === categoryId) {
+    //     setProduct(c.categoryName)
+    //     return
+    //   }
+    // })
   }
 
   const saveCategory = () => {
-    addEditCategory({ categoryId, name: category })
+    // addEditCategory({ categoryId, name: category })
     if (!saving) {
       toggleModal()
     }
   }
 
+  const handleInput = (e) => {
+    const { name, value } = e.target;
+    setProduct({
+      ...product,
+      [name]: value
+    })
+  }
+
+  const setProducImage = (path) => {
+    setProduct({
+      ...product,
+      image: path
+    })  
+  }
+
   return (
     <div>
       <Dialog fullWidth disableBackdropClick open={open} onClose={toggleModal} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">{categoryId > 0 ? 'Edit' : 'Add'} Category</DialogTitle>
+        <DialogTitle id="form-dialog-title">{productId > 0 ? 'Edit' : 'Add'} Product</DialogTitle>
         <DialogContent>
-          <TextField
-            autoFocus
-            autoComplete="off"
-            id="categoryName"
-            label="Category Name"
-            type="text"
-            fullWidth
-            variant="outlined"
-            value={category}
-            onChange={e => setCategory(e.target.value)}
-          />
+        <Grid container>
+          <Grid item md={6} className={classes.gridItem}>
+            <TextInput name="name" label="Product Name" value={product.name} onChange={handleInput} />
+            <TextInput name="price" label="Product Price" value={product.price} onChange={handleInput} />
+            <TextInput name="description" label="Product Description" value={product.description} onChange={handleInput} multiline rowsMax={4} />
+          </Grid>
+          <Grid item md={6} className={classes.gridItem}>
+            <ProductImage setProducImage={setProducImage} image={product.image}/>
+          </Grid>
+          </Grid>
+
         </DialogContent>
         <DialogActions>
           <Button onClick={toggleModal} color="primary">
