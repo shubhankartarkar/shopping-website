@@ -1,31 +1,7 @@
 const express = require('express');
 const sql = require("mssql");
 const router =  express.Router()
-
-// const config = {
-//   server: 'user-PC',
-//   database: 'ecommerce',
-//   driver: "msnodesqlv8",
-//   options: {
-//     trustedConnection: true
-//   }
-// };
-
-// var config = {
-//   driver: 'msnodesqlv8',
-//   connectionString: 'Driver=SQL Server;Server=user-PC\\MSSQLSERVER;Database=ecommerce;Trusted_Connection=true;'
-// };
-
-var config = {
-  user: 'testing',
-  password: 'test',
-  server: 'user-PC', 
-  database: 'ecommerce',
-  options:{
-    enableArithAbort:true
-  }
-};
-
+const { config } = require("../../globalConstants")
 
 router.get('/', (req, res) => {
   sql.connect(config, function (err) {
@@ -33,8 +9,8 @@ router.get('/', (req, res) => {
       res.send(err)
     } else {
       let request = new sql.Request(); 
-      request.query(`select productid as id,productname as name,productprice as price,
-      productDescription as description,isnull(productImage,'product-image-placeholder.jpg') as image from Product`, function (err, recordset) {
+      request.query(`select productid as id,isnull(productname,'') as name,isnull(productprice,0) as price,
+      isnull(productDescription,'') as description,isnull(productImage,'product-image-placeholder.jpg') as image from Product`, function (err, recordset) {
 
         if (err) {
           res.send(err)
@@ -48,8 +24,8 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
   sql.connect(config, (err) => {
+    console.log(req.body)
     if(!err){
-      console.log(req.body)
       let { productId, name, price, description } = req.body
 
       if(name.length > 0 && price.length > 0 && description.length > 0){
@@ -60,13 +36,13 @@ router.post('/', (req, res) => {
 
         if(productId > 0){
           request.input('productId', sql.Int,productId)
-          request.query(`update Product set Name = @name , Price = @price, Description = @description where ProductId = @productId; 
+          request.query(`update Product set productname = @name , productprice = @price, productDescription = @description where ProductId = @productId; 
             select * from product where ProductId = @productId`,(err, recordset) => {
             if(!err) res.send(recordset.recordset)
           })
 
         } else {
-          request.query(`Insert into Product(Name, Price, Description) values(@name , @price, @description);
+          request.query(`Insert into Product(productname, productprice, productDescription) values(@name , @price, @description);
           select * from product where ProductId = SCOPE_IDENTITY()`,(err, recordset) => {
             if(err){
               res.send(err)

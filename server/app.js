@@ -18,5 +18,6 @@ app.use('/public',express.static(__dirname+'/public'))
 app.use('/api/product', require('./routes/products/'))
 app.use('/api/category', require('./routes/categories/'))
 app.use('/api/tablenames', require('./routes/tablenames/'))
+app.use('/api/upload', require('./routes/upload'))
 
 app.listen(port, () => console.log(`listening on port ${port}`))

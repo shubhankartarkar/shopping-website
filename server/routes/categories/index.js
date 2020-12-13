@@ -1,17 +1,7 @@
 const express = require('express');
 const sql = require("mssql");
 const router =  express.Router()
-
-var config = {
-  user: 'testing',
-  password: 'test',
-  server: 'user-PC', 
-  database: 'ecommerce',
-  options:{
-    enableArithAbort:true
-  }
-};
-
+const { config } = require("../../globalConstants")
 
 router.get('/', (req, res) => {
   sql.connect(config, function (err) {

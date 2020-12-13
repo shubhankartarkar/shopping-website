@@ -58,11 +58,11 @@ function ProductTable(props) {
           </TableHead>
           <TableBody>
             {products.map((row) => (
-              <TableRow key={row.productId}>
+              <TableRow key={row.id}>
                 <TableCell component="th" scope="row">
-                  <EditIcon onClick={() => (setProductId(row.productId), toggleModal())} />
+                  <EditIcon onClick={() => (setProductId(row.id), toggleModal())} />
                 </TableCell>
-                <TableCell>{row.productName}</TableCell>
+                <TableCell>{row.name}</TableCell>
               </TableRow>
             ))}
           </TableBody>

@@ -32,15 +32,13 @@ function fetchProductError(error){
 function fetchProduct(){
   return (dispatch) => {
     dispatch(fetchProductRequest())
-    return  setTimeout(() => {
-      axios.get(`${SERVER_URL}/api/prodcuts`)
+    return axios.get(`${SERVER_URL}/api/product`)
       .then(res => {
-        dispatch(fetchProductSuccess(res.dat))
+        dispatch(fetchProductSuccess(res.data))
       })
       .catch(error => {
         dispatch(fetchProductError(error))
       })
-    }, 5000)
   }
 }
 
@@ -65,19 +63,18 @@ function addEditProductError(error){
   }
 }
 
-function addEditCategory(productData){
+function addEditProduct(productData){
   return (dispatch) => {
     dispatch(addEditProductRequest())
-    return setTimeout(() => {
-      axios.post(`${SERVER_URL}/api/category`,productData)
+    return axios.post(`${SERVER_URL}/api/product`,productData)
       .then(res => {
+        console.log(res)
         dispatch(addEditProductSuccess(res.data))
       })
       .catch(error => {
         dispatch(addEditProductError(error))
       })
-    }, 5000)
   }
 }
 
-export { fetchProduct, addEditCategory }
+export { fetchProduct, addEditProduct }

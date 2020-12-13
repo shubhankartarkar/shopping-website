@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, makeStyles } from '@material-ui/core';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
 import { connect } from 'react-redux';
-import { addEditCategory } from '../../../Store/Admin/Product/ProductAction';
+import { addEditProduct } from '../../../Store/Admin/Product/ProductAction';
 import TextInput from '../../controls/TextInput';
 import ProductImage from './ProductImage';
 
@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function ProductForm(props) {
-  const { open, toggleModal, productId, product: { products, saving }, addEditCategory } = props
+  const { open, toggleModal, productId, product: { products, saving }, addEditProduct } = props
   const classes = useStyles()
   const initialState = {
     id: productId,
@@ -37,16 +37,16 @@ function ProductForm(props) {
   }, [open])
 
   const getProduct = () => {
-    // products.map(c => {
-    //   if(c.categoryId === categoryId) {
-    //     setProduct(c.categoryName)
-    //     return
-    //   }
-    // })
+    products.map(p => {
+      if(p.id === productId) {
+        setProduct(p)
+      }
+    })
   }
 
   const saveCategory = () => {
-    // addEditCategory({ categoryId, name: category })
+    addEditProduct(product)
+    //addEditProduct
     if (!saving) {
       toggleModal()
     }
@@ -60,9 +60,10 @@ function ProductForm(props) {
     })
   }
 
-  const setProducImage = (path) => {
+  const setProductImage = (id, path) => {
     setProduct({
       ...product,
+      id:id,
       image: path
     })  
   }
@@ -79,7 +80,7 @@ function ProductForm(props) {
             <TextInput name="description" label="Product Description" value={product.description} onChange={handleInput} multiline rowsMax={4} />
           </Grid>
           <Grid item md={6} className={classes.gridItem}>
-            <ProductImage setProducImage={setProducImage} image={product.image}/>
+            <ProductImage setProductImage={setProductImage} id={product.id} image={product.image} tempProductId={productId}/>
           </Grid>
           </Grid>
 
@@ -99,13 +100,13 @@ function ProductForm(props) {
 
 const mapStateToProps = state => {
   return {
-    product: state.products
+    product: state.adminProduct
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    addEditCategory: (data) => dispatch(addEditCategory(data))
+    addEditProduct: (data) => dispatch(addEditProduct(data))
   }
 }
 
