@@ -64,6 +64,7 @@ function addEditProductError(error){
 }
 
 function addEditProduct(productData){
+  console.log(productData)
   return (dispatch) => {
     dispatch(addEditProductRequest())
     return axios.post(`${SERVER_URL}/api/product`,productData)
@@ -72,6 +73,7 @@ function addEditProduct(productData){
         dispatch(addEditProductSuccess(res.data))
       })
       .catch(error => {
+        console.log(error)
         dispatch(addEditProductError(error))
       })
   }

@@ -4,6 +4,7 @@ import AutorenewIcon from '@material-ui/icons/Autorenew';
 import { connect } from 'react-redux';
 import { addEditProduct } from '../../../Store/Admin/Product/ProductAction';
 import TextInput from '../../controls/TextInput';
+import SelectList from '../../controls/SelectList';
 import ProductImage from './ProductImage';
 
 const useStyles = makeStyles(theme => ({
@@ -13,14 +14,14 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function ProductForm(props) {
-  const { open, toggleModal, productId, product: { products, saving }, addEditProduct } = props
+  const { open, toggleModal, productId, product: { products, saving }, addEditProduct, category } = props
   const classes = useStyles()
   const initialState = {
     id: productId,
     name: '',
     price: 1,
     description: '',
-    categoryId: 0,
+    categoryId: 1,
     image:''
   }  
 
@@ -60,6 +61,8 @@ function ProductForm(props) {
     })
   }
 
+  //const handleSelect = (e)
+
   const setProductImage = (id, path) => {
     setProduct({
       ...product,
@@ -78,6 +81,15 @@ function ProductForm(props) {
             <TextInput name="name" label="Product Name" value={product.name} onChange={handleInput} />
             <TextInput name="price" label="Product Price" value={product.price} onChange={handleInput} />
             <TextInput name="description" label="Product Description" value={product.description} onChange={handleInput} multiline rowsMax={4} />
+            <SelectList 
+              name="categoryId" 
+              label="Category" 
+              value={product.categoryId} 
+              onChange={handleInput} 
+              data={category.categories} 
+              listValue="categoryId"
+              listText="categoryName"
+              />
           </Grid>
           <Grid item md={6} className={classes.gridItem}>
             <ProductImage setProductImage={setProductImage} id={product.id} image={product.image} tempProductId={productId}/>
@@ -100,7 +112,8 @@ function ProductForm(props) {
 
 const mapStateToProps = state => {
   return {
-    product: state.adminProduct
+    product: state.adminProduct,
+    category: state.categories
   }
 }
 

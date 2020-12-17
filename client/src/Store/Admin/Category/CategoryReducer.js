@@ -2,10 +2,7 @@ import { FETCH_CATEGORY_REQUEST, FETCH_CATEGORY_SUCCESS, FETCH_CATEGORY_ERROR, A
 
 const initialState = {
   loading:true,
-  categories:[{
-    categoryId:1,
-    categoryName: 'Monitor',
-  }],
+  categories:[],
   error:'',
   saving:false
 }
