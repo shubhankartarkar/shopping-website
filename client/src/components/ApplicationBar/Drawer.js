@@ -4,6 +4,7 @@ import ApplicationBar from './ApplicationBar';
 import { Drawer, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import { useHistory } from 'react-router-dom';
+import RegisterForm from '../User/RegisterForm'
 
 const useStyles = makeStyles(theme => ({
   list: {
@@ -27,6 +28,13 @@ export default function SideDrawer() {
   const [state, setState] = useState({
     left: false
   });
+
+  //login form dialog
+  const [open, setOpen] = useState(false)
+
+  const toggleDialog = () => {
+    setOpen(!open)
+  }
 
   const toggleDrawer = () => {
     setState((prevState) => ({ ...prevState, left: !prevState.left }));
@@ -58,10 +66,11 @@ export default function SideDrawer() {
   return (
     <div>
       <React.Fragment>
-        <ApplicationBar toggleDrawer={toggleDrawer} title="Test" />
+        <ApplicationBar toggleDrawer={toggleDrawer} title="Test" toggleDialog={toggleDialog}/>
         <Drawer anchor="left" open={state.left} onClose={() => toggleDrawer()}>
           {list()}
         </Drawer>
+        <RegisterForm open={open} onClose={toggleDialog}/>
       </React.Fragment>
     </div>
   );

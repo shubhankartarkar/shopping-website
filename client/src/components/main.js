@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Products from './Layout/Products';
 import Profile from './Layout/Profile';
+import ProductDetail from './Layout/ProductDetail';
 import SideDrawer from '../components/ApplicationBar/Drawer';
 import ProductList from './Admin/Product/ProductList';
 import CategoryList from './Admin/Category/CategoryList';
@@ -16,6 +17,7 @@ function Main() {
           <Route exact path="/" component={Products} />
           <Route path="/Profile" component={Profile} />
           <Route path="/Products" component={ProductList} />
+          <Route path="/ProductDetail/:productid" component={ProductDetail} />
           <Route path="/Categories" component={CategoryList} /> 
         </Switch>
       </Grid>

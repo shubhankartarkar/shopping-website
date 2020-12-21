@@ -54,6 +54,8 @@ function ProductTable(props) {
             <TableRow>
               <TableCell>Action</TableCell>
               <TableCell>Name</TableCell>
+              <TableCell>Price</TableCell>
+              <TableCell>Category</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -63,6 +65,8 @@ function ProductTable(props) {
                   <EditIcon onClick={() => (setProductId(row.id), toggleModal())} />
                 </TableCell>
                 <TableCell>{row.name}</TableCell>
+                <TableCell>{row.price}</TableCell>
+                <TableCell>{row.categoryName}</TableCell>
               </TableRow>
             ))}
           </TableBody>

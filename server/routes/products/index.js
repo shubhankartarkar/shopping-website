@@ -3,15 +3,19 @@ const sql = require("mssql");
 const router =  express.Router()
 const { config } = require("../../globalConstants")
 
+//GET Returns all Products
 router.get('/', (req, res) => {
   sql.connect(config, function (err) {
     if (err) {
       res.send(err)
     } else {
       let request = new sql.Request(); 
-      request.query(`select productid as id,isnull(productname,'') as name,isnull(productprice,0) as price,
-      isnull(productDescription,'') as description,isnull(productImage,'product-image-placeholder.jpg') 
-      as image, isnull(categoryId,1) as categoryId from Product`, function (err, recordset) {
+      request.query(`select p.productid as id,isnull(p.productname,'') as name,isnull(p.productprice,0) as price,
+      isnull(p.productDescription,'') as description,isnull(p.productImage,'product-image-placeholder.jpg') 
+      as image, isnull(p.categoryId,1) as categoryId, isnull(c.categoryName,'No Category Added') as categoryName
+      from Product p
+      left outer join Category c on c.categoryId = p.categoryId
+      `, function (err, recordset) {
 
         if (err) {
           res.send(err)
@@ -23,6 +27,8 @@ router.get('/', (req, res) => {
   })
 })
 
+
+//POST Manages Insert and Update of Single Product based on data passed
 router.post('/', (req, res) => {
   sql.connect(config, (err) => {
     console.log(req.body)
@@ -41,14 +47,27 @@ router.post('/', (req, res) => {
           request.query(`update Product set productname = @name , productprice = @price, 
             productDescription = @description , categoryId = @categoryId
             where ProductId = @productId; 
-            select * from product where ProductId = @productId`,(err, recordset) => {
+            
+            select p.productid as id,isnull(p.productname,'') as name,isnull(p.productprice,0) as price,
+            isnull(p.productDescription,'') as description,isnull(p.productImage,'product-image-placeholder.jpg') 
+            as image, isnull(p.categoryId,1) as categoryId, isnull(c.categoryName,'No Category Added') as categoryName
+            from Product p
+            left outer join Category c on c.categoryId = p.categoryId
+             where ProductId = @productId`,
+            (err, recordset) => {
             if(!err) res.send(recordset.recordset)
           })
 
         } else {
           request.query(`Insert into Product(productname, productprice, productDescription,categoryId) 
                                       values(@name , @price, @description, @categoryId);
-          select * from product where ProductId = SCOPE_IDENTITY()`,(err, recordset) => {
+
+            select p.productid as id,isnull(p.productname,'') as name,isnull(p.productprice,0) as price,
+            isnull(p.productDescription,'') as description,isnull(p.productImage,'product-image-placeholder.jpg') 
+            as image, isnull(p.categoryId,1) as categoryId, isnull(c.categoryName,'No Category Added') as categoryName
+            from Product p
+            left outer join Category c on c.categoryId = p.categoryId
+             where ProductId = SCOPE_IDENTITY()`,(err, recordset) => {
             if(err){
               res.send(err)
             }  else {
@@ -61,5 +80,44 @@ router.post('/', (req, res) => {
   })
 })
 
+
+router.get('/SingleProduct', (req, res) => {
+  const { productId } = req.query
+  if((!isNaN(productId))){
+    sql.connect(config, (err) => {
+      let request = new sql.Request();
+      request.input('productId', sql.Numeric, productId)
+      request.query(`set nocount on
+        if exists(select 1 from Product where productid=@productId)
+          begin
+            select 
+            p.productid as id,isnull(p.productname,'') as name,isnull(p.productprice,0) as price,
+            isnull(p.productDescription,'') as description,isnull(p.productImage,'product-image-placeholder.jpg') 
+            as image, isnull(p.categoryId,0) as categoryId, 
+            isnull(c.categoryName,'No Category Added') as categoryName
+            from Product p
+            left outer join Category c on c.categoryId = p.categoryId
+            where p.productid=@productId
+          end
+        else
+          begin
+          select 'not Found' as msg
+          end
+      `,(err, recordset) => {
+        if(err){
+          res.send(err)
+        } else {
+          res.send(recordset.recordset)
+        }
+      })
+    })
+  } else {
+    res.status(400).json({
+      status:'fail',
+      message:'Invalid Request'
+    })
+  }
+  
+})
 
 module.exports = router

@@ -1,6 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Card, CardActionArea, CardActions, CardContent, CardMedia, Button, Typography } from '@material-ui/core';
+import { useHistory } from 'react-router-dom'
+
 import { SERVER_STATIC_IMAGES } from '../../globalConstants';
 
 const useStyles = makeStyles({
@@ -19,7 +21,13 @@ const useStyles = makeStyles({
 
 function ProductCard(props) {
   const classes = useStyles();
+  const history = useHistory()
   const { name, image, description, price, id }  = props.product;
+
+  const formatPrice = (price) => {
+    return (<span>&#x20b9; {price}</span>)
+  }
+
   return (
     <Card className={classes.root}>
       <CardActionArea>
@@ -39,10 +47,10 @@ function ProductCard(props) {
       </CardActionArea>
       <CardActions>
         <Button size="small" color="primary">
-          {price}
+        {formatPrice(price)}
         </Button>
-        <Button size="small" color="primary">
-          Add to Cart
+        <Button size="small" color="primary" onClick={() => history.push(`/ProductDetail/${id}`)}>
+          View Product Details
         </Button>
       </CardActions>
     </Card>

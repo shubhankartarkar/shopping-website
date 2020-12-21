@@ -37,9 +37,19 @@ function ProductReducer(state = initialState, action) {
       }
 
     case ADD_EDIT_PRODUCT_SUCCESS:
+      let newProduct = [], productIndex = 0;
+      productIndex = action.payload[0].id - 1
+      if(productIndex >= 0){
+        if(state.products[productIndex] === undefined){
+          newProduct = [...state.products, ...action.payload]
+        } else {
+          newProduct = [...state.products.slice(0, productIndex), ...action.payload, ...state.products.slice(productIndex + 1)]
+        }
+      }
+    
       return {
         ...state,
-        products: [...state.products, action.payload],
+        products: newProduct,
         saving: false
       }
 

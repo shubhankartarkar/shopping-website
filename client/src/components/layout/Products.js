@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { fetchProducts } from '../../Store/Product/ProductActions';
-import { CircularProgress, makeStyles } from '@material-ui/core';
+import { LinearProgress, makeStyles } from '@material-ui/core';
 import ProductCard from './ProductCard';
 
 const useStyles = makeStyles({
@@ -9,8 +9,9 @@ const useStyles = makeStyles({
     display: 'flex',
     flexWrap: 'wrap',
     gap: '20px',
-    marginTop: '20px'
-  }
+    marginTop: '20px',
+    width:'100%'
+   }
 })
 
 function Products(props) {
@@ -28,15 +29,15 @@ function Products(props) {
           return <ProductCard product={product} key={product.id}/>
         })
       } else {
-        return <CircularProgress />
+        return <LinearProgress color="secondary" style={{width: '100vw'}}/>
       }
     } else {
-      return <CircularProgress />
+      return <LinearProgress color="secondary" style={{width: '100vw'}}/>
     }
   }
 
   return (
-    <div className={classes.productWrapper}>
+    <div className={products.loading ? '': classes.productWrapper}>
       {renderProducts()}
     </div>
   )

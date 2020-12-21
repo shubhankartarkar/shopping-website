@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
 function ApplicationBar(props) {
   const classes = useStyles()
 
-  const { toggleDrawer, title } = props
+  const { toggleDrawer, title, toggleDialog } = props
   return (
     <AppBar position="static">
     <Toolbar>
@@ -30,7 +30,7 @@ function ApplicationBar(props) {
       <Typography variant="h6" className={classes.title}>
         {title}
     </Typography>
-      <Button color="inherit">Login</Button>
+      <Button color="inherit" onClick={toggleDialog}>Login</Button>
     </Toolbar>
   </AppBar>
   )
