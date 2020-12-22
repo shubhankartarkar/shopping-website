@@ -29,7 +29,7 @@ export default function SideDrawer() {
     left: false
   });
 
-  //login form dialog
+  //Register form dialog
   const [open, setOpen] = useState(false)
 
   const toggleDialog = () => {
@@ -70,7 +70,7 @@ export default function SideDrawer() {
         <Drawer anchor="left" open={state.left} onClose={() => toggleDrawer()}>
           {list()}
         </Drawer>
-        <RegisterForm open={open} onClose={toggleDialog}/>
+        <RegisterForm open={open} toggleDialog={toggleDialog}/>
       </React.Fragment>
     </div>
   );

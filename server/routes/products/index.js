@@ -31,7 +31,6 @@ router.get('/', (req, res) => {
 //POST Manages Insert and Update of Single Product based on data passed
 router.post('/', (req, res) => {
   sql.connect(config, (err) => {
-    console.log(req.body)
     if(!err){
       let { id, name, price, description, categoryId } = req.body
 

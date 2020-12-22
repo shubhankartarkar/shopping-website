@@ -1,6 +1,8 @@
 import React,{ useState } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
-import TextInput from '../../controls/TextInput';
+import axios from 'axios';
+import TextInput from '../controls/TextInput';
+import { SERVER_URL } from '../../globalConstants'
 
 function RegisterForm(props) {
   const { open, toggleDialog} = props
@@ -8,7 +10,7 @@ function RegisterForm(props) {
   const [form, setForm] = useState({
     name:'',
     email:'',
-    number:null
+    number:''
   })
 
   const handleInput = (e) => {
@@ -18,6 +20,20 @@ function RegisterForm(props) {
       ...form,
       [name]: value
     })
+  }
+
+  const submitForm = () => {
+    console.log(form)
+    let { name, email, number } = form
+    if(name.trim().length > 0 && email.trim().length > 0 && String(number).length >= 10){
+      axios.post(`${SERVER_URL}/api/customer/register`,form)
+        .then(res => {
+          console.log(res, form)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
   }
 
   return (
@@ -33,7 +49,7 @@ function RegisterForm(props) {
           <Button onClick={toggleDialog} color="primary">
             Cancel
           </Button>
-          <Button  color="primary">
+          <Button color="primary" onClick={submitForm}>
             Register
           </Button>
         </DialogActions>
