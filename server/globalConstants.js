@@ -8,6 +8,9 @@ const config = {
   }
 };
 
+const JWT_SECRET_KEY = 'ShubhamTestingJWTLogin'
+
 module.exports = {
-  config
+  config,
+  JWT_SECRET_KEY
 }
