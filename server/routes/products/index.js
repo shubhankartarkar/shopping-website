@@ -2,6 +2,7 @@ const express = require('express');
 const sql = require("mssql");
 const router =  express.Router()
 const { config } = require("../../globalConstants")
+const { getTokenDetails } = require("../../middleware/auth")
 
 //GET Returns all Products
 router.get('/', (req, res) => {
@@ -79,23 +80,28 @@ router.post('/', (req, res) => {
   })
 })
 
-
-router.get('/SingleProduct', (req, res) => {
+//GET Data from single product
+router.get('/SingleProduct', getTokenDetails ,(req, res) => {
   const { productId } = req.query
+  const { id } = req.user
   if((!isNaN(productId))){
     sql.connect(config, (err) => {
       let request = new sql.Request();
       request.input('productId', sql.Numeric, productId)
+      request.input('customerid', sql.Numeric, id)
+
+      console.log(id)
       request.query(`set nocount on
         if exists(select 1 from Product where productid=@productId)
           begin
-            select 
-            p.productid as id,isnull(p.productname,'') as name,isnull(p.productprice,0) as price,
+            select p.productid as id,isnull(p.productname,'') as name,isnull(p.productprice,0) as price,
             isnull(p.productDescription,'') as description,isnull(p.productImage,'product-image-placeholder.jpg') 
             as image, isnull(p.categoryId,0) as categoryId, 
-            isnull(c.categoryName,'No Category Added') as categoryName
+            isnull(c.categoryName,'No Category Added') as categoryName,
+            isnull(o.orderItemid,0) as orderItemid 
             from Product p
             left outer join Category c on c.categoryId = p.categoryId
+            left outer join OrderItems o on o.productid = p.productid and o.customerid = @customerid and o.itemStatus = 1
             where p.productid=@productId
           end
         else

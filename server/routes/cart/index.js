@@ -2,20 +2,24 @@ const express = require('express')
 const sql = require('mssql')
 const router = express.Router()
 const { config } = require('../../globalConstants')
+const  { authenticateToken }  = require('../../middleware/auth')
 
-router.post('cart/addItem', (req, res) => {
+router.post('/addItem', authenticateToken , (req, res) => {
   sql.connect(config, (err) => {
     if(err){
       res.send(err)
     } else {
-      let { customerId, productId } = req.body
+      let { token, id } = req.body
+      let { id: customerId } = req.user
 
-      if(customerId > 0 && productId > 0){
+      if(token.length > 0 && id > 0 && customerId > 0){
         let request = new sql.Request()
         request.input('customerId', sql.Numeric, customerId)
-        request.input('productId', sql.Numeric, productId)
+        request.input('productId', sql.Numeric, id)
 
-        request.query(`Insert into OrderItems(productId, customerId)value(@productId,@customerId)`,(err,recordset) => {
+        request.query(`Insert into OrderItems(productId, customerId, Quantity, itemStatus)
+                                        values(@productId,@customerId,1, 1);
+                        select SCOPE_IDENTITY() as orderitemid`,(err,recordset) => {
           if(err){
             res.send(err)
           } else {
@@ -26,3 +30,5 @@ router.post('cart/addItem', (req, res) => {
     }
   })
 })
+
+module.exports = router

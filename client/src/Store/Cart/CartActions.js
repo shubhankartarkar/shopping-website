@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { SERVER_URL } from '../../globalConstants';
-import { ADD_ITEM_REQUEST, ADD_ITEM_SUCCESS, ADD_ITEM_ERROR, REMOVE_ITEM_REQUEST, REMOVE_ITEM_SUCCESS, REMOVE_ITEM_ERROR,
-  INCREMENT_ITEM, DECREMENT_ITEM} from './CartTypes';
+import {  ADD_ITEM_REQUEST, ADD_ITEM_SUCCESS, ADD_ITEM_ERROR, 
+          REMOVE_ITEM_REQUEST, REMOVE_ITEM_SUCCESS, REMOVE_ITEM_ERROR,
+          INCREMENT_ITEM, DECREMENT_ITEM } from './CartTypes';
 
 function addItemRequest(){
   return {

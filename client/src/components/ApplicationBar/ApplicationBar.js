@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button, IconButton, AppBar, Toolbar, Typography, makeStyles } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
+import { connect } from 'react-redux'
 
 const useStyles = makeStyles(theme => ({
   list: {
@@ -15,12 +16,16 @@ const useStyles = makeStyles(theme => ({
   title: {
     flexGrow: 1,
   },
+  loginStatus: {
+    textTransform: 'capitalize',
+    fontSize:'1.2rem'
+  }
 }));
 
 function ApplicationBar(props) {
   const classes = useStyles()
 
-  const { toggleDrawer, title, toggleDialog } = props
+  const { toggleDrawer, title, toggleDialog, user } = props
   return (
     <AppBar position="static">
     <Toolbar>
@@ -30,10 +35,18 @@ function ApplicationBar(props) {
       <Typography variant="h6" className={classes.title}>
         {title}
     </Typography>
-      <Button color="inherit" onClick={toggleDialog}>Login</Button>
+      <Button color="inherit" className={classes.loginStatus} onClick={user.loggedIn ? console.log(''): toggleDialog}>
+        {user.loggedIn ? user.name : 'Register'}
+      </Button>
     </Toolbar>
   </AppBar>
   )
 }
 
-export default ApplicationBar
+const mapStateToProps = state => {
+  return {
+    user: state.user
+  }
+}
+
+export default connect(mapStateToProps)(ApplicationBar)

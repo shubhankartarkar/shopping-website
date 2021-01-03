@@ -1,0 +1,4 @@
+const USER_lOGGED_IN = "USER_lOGGED_IN";
+const USER_lOGGED_OUT = "USER_lOGGED_OUT";
+
+export { USER_lOGGED_IN, USER_lOGGED_OUT }
