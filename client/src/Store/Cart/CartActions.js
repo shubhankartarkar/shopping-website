@@ -1,40 +1,16 @@
-import axios from 'axios';
-import { SERVER_URL } from '../../globalConstants';
-import {  ADD_ITEM_REQUEST, ADD_ITEM_SUCCESS, ADD_ITEM_ERROR, 
-          REMOVE_ITEM_REQUEST, REMOVE_ITEM_SUCCESS, REMOVE_ITEM_ERROR,
-          INCREMENT_ITEM, DECREMENT_ITEM } from './CartTypes';
+import { INCREMENT_ITEM, DECREMENT_ITEM } from './CartTypes';
 
-function addItemRequest(){
+function incrementItem(){
   return {
-    type: ADD_ITEM_REQUEST
+    type: INCREMENT_ITEM
   }
 }
 
-function addItemSuccess(data){
+function decrementItem(){
   return {
-    type: ADD_ITEM_SUCCESS,
-    payload: data
+    type: DECREMENT_ITEM
   }
 }
 
-function addItemError(error){
-  return {
-    type: ADD_ITEM_ERROR,
-    payload: error
-  }
-}
+export { incrementItem, decrementItem }
 
-function addItem(productId){
-  return (dispatch) => {
-    dispatch(addItemRequest())
-    return axios.post(`${SERVER_URL}/api/cart/addItem`,{productId})
-      .then(res => {
-        addItemSuccess(res.data)
-      })
-      .catch(err => {
-        addItemError(err)
-      })
-  }
-}
-
-export { addItem }

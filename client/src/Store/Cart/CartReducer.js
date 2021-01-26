@@ -1,10 +1,17 @@
-import { ADD_ITEM_REQUEST, ADD_ITEM_SUCCESS, ADD_ITEM_ERROR, REMOVE_ITEM_REQUEST, REMOVE_ITEM_SUCCESS, REMOVE_ITEM_ERROR,
-  INCREMENT_ITEM, DECREMENT_ITEM} from './CartTypes'
+import { INCREMENT_ITEM, DECREMENT_ITEM} from './CartTypes'
 
-const initialState = []
+const initialState = {
+  count: 0
+}
 
 function CartReducer(state = initialState, action){
-  return initialState
+  switch(action.type){
+    case INCREMENT_ITEM:
+      return state.count++
+    
+    case DECREMENT_ITEM:
+      return state.count--
+  }
 }
 
 export default CartReducer

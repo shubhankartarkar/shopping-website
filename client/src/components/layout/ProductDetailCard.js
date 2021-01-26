@@ -64,7 +64,10 @@ function ProductDetailCard(props) {
         <Button size="small" color="primary">
         {formatPrice(price)}
         </Button>
-        {   orderItemid > 0 ? (<Button size="small" color="primary" onClick={() => history.push('/user/cart')}>Go to Cart</Button>) : 
+        {   orderItemid > 0 ? 
+            (<Button size="small" color="primary" onClick={() => history.push('/user/cart')}>
+              Go to Cart
+            </Button>) : 
             (<Button size="small" color="primary" onClick={() => addItem()}>
            Add to Cart 
           </Button>)

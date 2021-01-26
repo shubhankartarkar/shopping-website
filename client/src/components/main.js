@@ -10,7 +10,8 @@ import SideDrawer from '../components/ApplicationBar/Drawer';
 import ProductList from './Admin/Product/ProductList';
 import CategoryList from './Admin/Category/CategoryList';
 import { SERVER_URL } from '../globalConstants'
-import { loginUser } from '../Store/User/UserActions'
+import { loginUser } from '../Store/User/UserActions';
+import UserCart from './Layout/UserCart';
 
 function Main(props) {
   const { loginSuccess } = props
@@ -40,6 +41,7 @@ function Main(props) {
           <Route path="/Products" component={ProductList} />
           <Route path="/ProductDetail/:productid" component={ProductDetail} />
           <Route path="/Categories" component={CategoryList} /> 
+          <Route path="/user/cart" component={UserCart} /> 
         </Switch>
       </Grid>
     </BrowserRouter>
