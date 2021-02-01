@@ -101,8 +101,9 @@ router.get('/SingleProduct', getTokenDetails ,(req, res) => {
             isnull(o.orderItemid,0) as orderItemid 
             from Product p
             left outer join Category c on c.categoryId = p.categoryId
-            left outer join OrderItems o on o.productid = p.productid and o.customerid = @customerid and o.itemStatus = 1
-            where p.productid=@productId
+            left outer join OrderItems o on o.productid = p.productid 
+            and o.customerid = @customerid and o.itemStatus = 1 and isnull(o.orderid,0) = 0
+            where p.productid=@productId 
           end
         else
           begin

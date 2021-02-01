@@ -4,17 +4,18 @@ import { Grid } from '@material-ui/core';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Products from './Layout/Products';
-import Profile from './Layout/Profile';
+import MyOrders from './Layout/MyOrders';
 import ProductDetail from './Layout/ProductDetail';
 import SideDrawer from '../components/ApplicationBar/Drawer';
 import ProductList from './Admin/Product/ProductList';
 import CategoryList from './Admin/Category/CategoryList';
 import { SERVER_URL } from '../globalConstants'
 import { loginUser } from '../Store/User/UserActions';
+import { setCartCount } from '../Store/Cart/CartActions'
 import UserCart from './Layout/UserCart';
 
 function Main(props) {
-  const { loginSuccess } = props
+  const { loginSuccess, cartCount } = props
 
   useEffect(() => {
     checkUser()
@@ -27,6 +28,7 @@ function Main(props) {
       axios.post(`${SERVER_URL}/api/customer/verifyToken`, {token})
         .then(res => {
           loginSuccess(res.data)
+          cartCount(res.data.user[1][0].count)
         })
     }
   }
@@ -37,7 +39,7 @@ function Main(props) {
         <Grid container>
         <Switch>
           <Route exact path="/" component={Products} />
-          <Route path="/Profile" component={Profile} />
+          <Route path="/MyOrders" component={MyOrders} />
           <Route path="/Products" component={ProductList} />
           <Route path="/ProductDetail/:productid" component={ProductDetail} />
           <Route path="/Categories" component={CategoryList} /> 
@@ -50,7 +52,8 @@ function Main(props) {
 
 const mapDispatchToProps = dispatch => {
   return {
-    loginSuccess: (data) => dispatch(loginUser(data))
+    loginSuccess: (data) => dispatch(loginUser(data)),
+    cartCount: (count) => dispatch(setCartCount(count))
   }
 }
 

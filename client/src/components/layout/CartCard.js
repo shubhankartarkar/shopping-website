@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles, Card, CardContent, CardMedia, Typography } from '@material-ui/core';
+import { makeStyles, Card, CardContent, CardMedia, Typography, Button } from '@material-ui/core';
 import { SERVER_STATIC_IMAGES } from '../../globalConstants';
 import SelectQuantity from '../controls/SelectQuantity';
 
@@ -7,7 +7,8 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     padding: 16,
-    margin:5
+    margin:5,
+    boxShadow: 'none'
   },
   details: {
     display: 'flex',
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function CartCard(props) {
-  const { orderItemId, productId, productName, productImage, quantity } = props.item
+  const { orderItemId, productId, productName, productImage, quantity, productPrice } = props.item
   const { updateQuantity, removeOrderItem} = props
   let qty = [1,2,3,4,5,6]
   const classes = useStyles();
@@ -36,8 +37,16 @@ function CartCard(props) {
       />
       <div className={classes.details}>
         <CardContent className={classes.content}>
-          <Typography component="h5" variant="h5">
+          <Typography component="h6" variant="h6">
             {productName}
+          </Typography>
+          <Typography variant="body1">
+            Price: {productPrice} Total {productPrice * quantity}
+          </Typography> <br/>
+          <Typography variant="body1">
+            <Button variant="outlined" color="primary" onClick={() => removeOrderItem(orderItemId)}>
+              Remove
+            </Button>
           </Typography>
           <div>
             <SelectQuantity value={quantity} data={qty} onChange={updateQuantity} orderItemId={orderItemId}/>

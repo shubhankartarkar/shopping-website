@@ -1,11 +1,13 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Button } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { Button, Paper, Typography } from '@material-ui/core';
 import axios from 'axios';
 import { SERVER_URL } from '../../globalConstants';
 import CartCard from './CartCard';
 
 function UserCart() {
   const [cart, setCart] = useState([])
+  const [cartTotal, setCartTotal] = useState(0)
+  const [checkOutSuccess, setCheckOutSuccess] = useState(false)
   
   useEffect(() => {
     let token = localStorage.getItem('token')
@@ -20,6 +22,10 @@ function UserCart() {
       })
     }
   },[])
+
+  useEffect(() => {
+    setCartTotal(cart.map(p => p.productPrice * p.quantity).reduce((a, b) => a + b,0))
+  }, [cart])
 
   const updateQuantity = (e, orderItemId) => {
     let updateCart = cart
@@ -40,23 +46,46 @@ function UserCart() {
   }
 
   const removeOrderItem = (orderItemId) => {
-    console.log(orderItemId)
+    axios.post(`${SERVER_URL}/api/cart/removeItem`, { orderItemId })
+      .then(res => {
+        console.log(res.data)
+        if(res.data.message == 'success'){
+          setCart(cart.filter(item => item.orderItemId != res.data.deleteId))
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   const checkOut = () => {
-    axios.post(`${SERVER_URL}/api/cart/checkout`)
+    let token = localStorage.getItem('token')
+    axios.get(`${SERVER_URL}/api/cart/checkout?token=${token}`)
+      .then(res => {
+        console.log(res.data)
+          if(res.data.message == "success"){
+            setCheckOutSuccess(true)
+          }
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   return (
-    <div style={{margin:'auto'}}>
+    <Paper style={{margin:'auto'}}>
       {cart.length > 0 ? 
         cart.map(item => (
           <CartCard item={item} key={item.orderItemId} updateQuantity={updateQuantity} removeOrderItem={removeOrderItem}/>
         )) : <h1>No Items in Cart</h1>}
+      <Typography component="h6" variant="h6" style={{textAlign:'center'}}>
+        Cart  Total: {cartTotal}
+      </Typography>
       <div>
-        {cart.length > 0 ? <Button variant="contained" color="primary" onClick={checkOut}>Checkout</Button>: ''}
+        {cart.length > 0 ? 
+        <Button style={{display:'block',width:'100%', margin:'auto'}} variant="contained" color="primary" onClick={checkOut}>Checkout</Button>: ''}
       </div>
-    </div>
+    </Paper>
   )
 }
 

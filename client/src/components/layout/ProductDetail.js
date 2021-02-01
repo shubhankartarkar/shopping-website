@@ -36,7 +36,6 @@ function ProductDetail() {
     if(!isNaN(params.productid)) {
       axios.get(`${SERVER_URL}/api/product/SingleProduct?productId=${params.productid}&token=${token}`)
       .then((res) => {
-        console.log(res.data[0].orderItemid)
         setProduct(res.data[0])
       })
       .catch(err => {

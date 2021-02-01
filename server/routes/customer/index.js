@@ -101,9 +101,18 @@ router.post('/verifyToken', authenticateToken , (req, res) => {
       let request = new sql.Request()
       request.input('customerid',sql.Int, req.user.id)
 
-      request.query(`select customerid as id, rtrim(ltrim(CustomerName)) as name 
-        from customer where customerid = @customerid`, function(err, recordset) {
-          res.json({ status:"success",token: req.body.token, user: recordset.recordset[0] })
+      request.query(`
+        select customerid as id, rtrim(ltrim(CustomerName)) as name 
+        from customer where customerid = @customerid
+        
+        select count(oi.orderItemId) as count
+                      from OrderItems oi
+                      join product p on p.productid = oi.productid
+                      where 
+                      oi.customerid = @customerId 
+                      and oi.itemstatus = 1 and isnull(oi.orderid,0) = 0
+        `, function(err, recordset) {
+          res.json({ status:"success",token: req.body.token, user: recordset.recordsets })
         })
     }
   })

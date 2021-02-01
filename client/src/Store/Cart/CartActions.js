@@ -1,6 +1,7 @@
-import { INCREMENT_ITEM, DECREMENT_ITEM } from './CartTypes';
+import { INCREMENT_ITEM, DECREMENT_ITEM, SETCART_COUNT } from './CartTypes';
 
 function incrementItem(){
+  console.log('Increment Item Called')
   return {
     type: INCREMENT_ITEM
   }
@@ -11,6 +12,12 @@ function decrementItem(){
     type: DECREMENT_ITEM
   }
 }
+function setCartCount(count){
+ return {
+    type: SETCART_COUNT,
+    payload: count
+  }
+}
 
-export { incrementItem, decrementItem }
+export { incrementItem, decrementItem, setCartCount }
 

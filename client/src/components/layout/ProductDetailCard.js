@@ -3,6 +3,8 @@ import { makeStyles, Card, CardActionArea, CardActions, CardContent, CardMedia, 
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import { SERVER_STATIC_IMAGES, SERVER_URL } from '../../globalConstants';
+import { connect } from 'react-redux';
+import { incrementItem } from '../../Store/Cart/CartActions';
 
 const useStyles = makeStyles({
   root: {
@@ -25,7 +27,7 @@ function ProductDetailCard(props) {
   const classes = useStyles();
   const history = useHistory()
   const { categoryName, description, id, image ,name, price, categoryId, orderItemid } = props.product;
-  const { setProductItemId } = props
+  const { setProductItemId, incrementItem } = props
   const addItem = () => {
     let token = localStorage.getItem('token')
 
@@ -36,6 +38,7 @@ function ProductDetailCard(props) {
         .then((res) => {
           console.log(res)
           setProductItemId(res.data[0].orderitemid)
+          incrementItem()
         })
     } else {
       // Show Login Modal
@@ -77,5 +80,11 @@ function ProductDetailCard(props) {
   )
 }
 
-export default ProductDetailCard
+const mapDispatchToProps = dispatch => {
+  return {
+    incrementItem : () => dispatch(incrementItem())
+  }
+}
+
+export default connect(null, mapDispatchToProps)(ProductDetailCard)
 

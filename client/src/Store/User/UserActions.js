@@ -3,8 +3,8 @@ import { USER_lOGGED_IN, USER_lOGGED_OUT } from './UserTypes'
 function loginUser(data) {
   let user = {
     token: data.token,
-    id: data.user.id,
-    name: data.user.name
+    id: data.user[0][0].id,
+    name: data.user[0][0].name
   }
 
   return {

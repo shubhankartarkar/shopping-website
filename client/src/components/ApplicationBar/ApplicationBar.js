@@ -23,13 +23,17 @@ const useStyles = makeStyles(theme => ({
   },
   badge: {
     marginRight: theme.spacing(2)
+  },
+  hide: {
+    display:'none'
   }
 }));
 
 function ApplicationBar(props) {
   const classes = useStyles()
-
-  const { toggleDrawer, title, toggleDialog, user } = props
+ 
+  const { toggleDrawer, title, toggleDialog, user, cart } = props
+  
   return (
     <AppBar position="static">
       <Toolbar>
@@ -39,7 +43,7 @@ function ApplicationBar(props) {
         <Typography variant="h6" className={classes.title}>
           {title}
         </Typography>
-        <Badge badgeContent={4} color="error" className={classes.badge}>
+        <Badge badgeContent={cart.count} color="error" className={cart.count ? classes.badge : classes.hide}>
           <ShoppingCartIcon />
         </Badge>
         <Button color="inherit" className={classes.loginStatus} onClick={user.loggedIn ? console.log('') : toggleDialog}>
@@ -52,7 +56,8 @@ function ApplicationBar(props) {
 
 const mapStateToProps = state => {
   return {
-    user: state.user
+    user: state.user,
+    cart: state.cart
   }
 }
 

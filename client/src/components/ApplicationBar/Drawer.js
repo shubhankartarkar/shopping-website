@@ -66,7 +66,7 @@ export default function SideDrawer() {
   return (
     <div>
       <React.Fragment>
-        <ApplicationBar toggleDrawer={toggleDrawer} title="Test" toggleDialog={toggleDialog}/>
+        <ApplicationBar toggleDrawer={toggleDrawer} title="E Commerce" toggleDialog={toggleDialog}/>
         <Drawer anchor="left" open={state.left} onClose={() => toggleDrawer()}>
           {list()}
         </Drawer>

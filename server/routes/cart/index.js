@@ -39,10 +39,13 @@ router.get('/userCart', getTokenDetails, (req, res) => {
 
       let request = new sql.Request()
       request.input('customerId', sql.Numeric, id)
-      request.query(`select oi.orderItemId, oi.productid as productId, p.productName, oi.quantity, p.productImage
+      request.query(`select oi.orderItemId, oi.productid as productId, p.productName, 
+                      oi.quantity, p.productImage, p.productPrice
                       from OrderItems oi
                       join product p on p.productid = oi.productid
-                      where oi.customerid = @customerId and oi.itemstatus = 1`, (err, recordset) => {
+                      where 
+                      oi.customerid = @customerId 
+                      and oi.itemstatus = 1 and isnull(oi.orderid,0) = 0`, (err, recordset) => {
             if(err){
               res.json({message: 'Some error occured'})
             } else {
@@ -76,6 +79,58 @@ router.post('/updateQuantity', (req, res) => {
   })
   } else {
     res.json({message:'error'})
+  }
+})
+
+router.get('/checkout', getTokenDetails ,(req, res) => {
+  const { id } = req.user
+  
+  sql.connect(config, (err) => {
+    if(err){
+     res.json({message:'error'})
+    } else {
+      let request = new sql.Request()
+      request.input('customerid', sql.Numeric, id)
+      request.execute('spCheckoutOrder', (err, result) => {
+        if(err){
+          console.log(err)
+          res.json({message:'error'})
+        } else {
+          res.json({result: result.recordset})
+        }
+      })
+    }
+  })
+})
+
+router.post('/removeItem', (req, res) => {
+  const { orderItemId } = req.body
+  console.log(req.body)
+  if(orderItemId > 0){
+    sql.connect(config, (err) => {
+      if(err){
+        res.json({message: 'error'})
+      } else {
+        let request = new sql.Request()
+        request.input('orderItemId', orderItemId)
+        request.query(`
+          if exists(select 1 from orderitems where orderItemId = @orderItemId)
+            begin 
+              delete from orderitems where orderItemId = @orderItemId
+              select 'success' as message
+            end
+          else 
+            begin
+              select 'No Order found' as message
+            end`, (err, result) => {
+              if(err){
+                res.json({message: 'error'})
+              } else{
+                res.json({message: result.recordset[0].message, deleteId: orderItemId})
+              }
+            })
+      }
+    })
   }
 })
 
