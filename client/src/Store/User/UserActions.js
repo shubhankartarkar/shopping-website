@@ -4,7 +4,8 @@ function loginUser(data) {
   let user = {
     token: data.token,
     id: data.user[0][0].id,
-    name: data.user[0][0].name
+    name: data.user[0][0].name,
+    userType: data.user[0][0].userType
   }
 
   return {

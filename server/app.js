@@ -15,5 +15,6 @@ app.use('/api/tablenames', require('./routes/tablenames/'))
 app.use('/api/customer', require('./routes/customer/'))
 app.use('/api/upload', require('./routes/upload'))
 app.use('/api/cart', require('./routes/cart'))
+app.use('/api/order', require('./routes/orders'))
 
 app.listen(port, () => console.log(`listening on port ${port}`))

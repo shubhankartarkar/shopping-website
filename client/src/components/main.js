@@ -13,6 +13,7 @@ import { SERVER_URL } from '../globalConstants'
 import { loginUser } from '../Store/User/UserActions';
 import { setCartCount } from '../Store/Cart/CartActions'
 import UserCart from './Layout/UserCart';
+import OrderList from './Admin/Orders/OrderList'
 
 function Main(props) {
   const { loginSuccess, cartCount } = props
@@ -44,6 +45,8 @@ function Main(props) {
           <Route path="/ProductDetail/:productid" component={ProductDetail} />
           <Route path="/Categories" component={CategoryList} /> 
           <Route path="/user/cart" component={UserCart} /> 
+          <Route path="/Orders" component={OrderList} /> 
+          <Route path="/my-orders" component={MyOrders} /> 
         </Switch>
       </Grid>
     </BrowserRouter>

@@ -2,21 +2,23 @@ import { USER_lOGGED_IN, USER_lOGGED_OUT } from './UserTypes';
 
 const initialState = {
   token: '',
-  name: 'Shubham',
+  name: '',
   loggedIn: false,
-  id: 0
+  id: 0,
+  userType:'U'
 }
 
 function UserReducer(state = initialState, action){
   switch(action.type){
     case USER_lOGGED_IN:
-      const { token = '', name = '', id  = ''} = action.payload
+      const { token = '', name = '', id  = '', userType = 'U'} = action.payload
       return {
         ...state,
           token,
           name,
           id,
-          loggedIn: true
+          loggedIn: true,
+          userType
       }
 
       case USER_lOGGED_OUT: 

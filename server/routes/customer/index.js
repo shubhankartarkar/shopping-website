@@ -24,8 +24,8 @@ router.post('/register', (req, res) => {
         request.query(`
           IF NOT EXISTS(select 1 from customer where CustomerEmail = @email)
             BEGIN
-                insert into customer(CustomerName, CustomerEmail, CustomerNumber, password)
-                              values(@name, @email, @number, @password)
+                insert into customer(CustomerName, CustomerEmail, CustomerNumber, password, userType)
+                              values(@name, @email, @number, @password,'U')
                 select 'User Registered Successfully' as message
             END
           ELSE
@@ -102,7 +102,8 @@ router.post('/verifyToken', authenticateToken , (req, res) => {
       request.input('customerid',sql.Int, req.user.id)
 
       request.query(`
-        select customerid as id, rtrim(ltrim(CustomerName)) as name 
+        select customerid as id, rtrim(ltrim(CustomerName)) as name,
+        isnull(UserType,'U') as userType
         from customer where customerid = @customerid
         
         select count(oi.orderItemId) as count

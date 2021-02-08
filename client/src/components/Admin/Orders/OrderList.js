@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Typography, Paper, Card, CardActionArea, CardActions, CardContent, makeStyles, Button } from '@material-ui/core'
-import { SERVER_URL } from '../../globalConstants';
-import { useHistory } from 'react-router-dom'
-import OrderModal from './OrderModal';
+import { SERVER_URL } from '../../../globalConstants';
+import OrderModal from '../../Layout/OrderModal';
 
 const useStyles = makeStyles({
 	cardMain: {
@@ -15,20 +14,16 @@ const useStyles = makeStyles({
 	}
 });
 
-function MyOrders() {
+function OrderList() {
 	const classes = useStyles();
-	let [userOrders, setUserOrders] = useState([])
+  let [userOrders, setUserOrders] = useState([])
 	let [loading, setLoading] = useState(true)
 	let [open, setOpen] = useState(false)
 	let [selectedOrderId, setSelectedOrderId] = useState(0)
 
 	useEffect(() => {
-		let token = localStorage.getItem('token')
-
-		if (Boolean(token)) {
-			axios.post(`${SERVER_URL}/api/order/userOrders`, { token })
+		axios.get(`${SERVER_URL}/api/order/allOrders?userType=A`)
 				.then(res => {
-					console.log(res.data)
 					if (res.data.message === 'success') {
 						setUserOrders(res.data.orders)
 						setLoading(false)
@@ -38,10 +33,6 @@ function MyOrders() {
 					console.log(err);
 					setLoading(false)
 				})
-		} else {
-			//Show Not Looged in
-			setLoading(false)
-		}
 	}, [])
 
 	const toggleModal = (e, orderId = 0) => {
@@ -58,12 +49,16 @@ function MyOrders() {
           </Typography> : ''
 			}
 			{
-				userOrders.map(({ orderId, orderDate, itemcount: itemCount, orderTotal }) => (
+				userOrders.map(({ orderId, orderDate, itemcount: itemCount, orderTotal, 
+            customerName, customerEmailId, contactNo }) => (
 						<Card className={classes.cardMain} key={orderId}>
 							<CardActionArea>
 								<CardContent>
-									<Paper elevation={0} style={{display:'flex'}}>
-										<h4>Order Date:{orderDate}</h4> 
+                  <h2>{customerName}</h2>
+                  <Paper style={{display:'flex',justifyContent:'space-between'}}>
+                    <h4>{customerEmailId}</h4> <h4>{contactNo}</h4></Paper>
+                  <Paper elevation={0} style={{display:'flex'}}>
+                    <h4>Order Date:{orderDate}</h4> 
 										<h3 style={{marginLeft: 'auto'}}>Rs.{orderTotal}</h3>
 									</Paper>
 									<Typography>
@@ -84,4 +79,4 @@ function MyOrders() {
 	)
 }
 
-export default MyOrders
+export default OrderList
